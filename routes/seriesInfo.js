@@ -3,6 +3,6 @@ const seriesInfo = require("../controllers/seriesController");
 
 const router = express.Router();
 
-router.get("/", seriesInfo.seriesDetails);
+router.get("/", seriesInfo.getSeries);
 
 module.exports = router;
