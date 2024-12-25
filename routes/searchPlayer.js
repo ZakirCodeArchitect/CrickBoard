@@ -1,8 +1,8 @@
 const express = require("express");
-const playerController = require("../controllers/playerController");
+const searchPlayerController = require("../controllers/searchPlayerController");
 
 const router = express.Router();
 
-router.get("/", playerController.playerDetails);
+router.get("/", searchPlayerController.searchPlayer);
 
 module.exports = router;
