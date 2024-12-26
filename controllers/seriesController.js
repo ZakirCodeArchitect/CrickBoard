@@ -126,7 +126,8 @@ const storeSeriesData = (req, res) => {
 
 const getData = async (req, res) => {
   try {
-    const seriesData = await Series.find(); // Fetch data from the database
+    // Fetch only series with status 'Upcoming'
+    const seriesData = await Series.find({ status: 'Upcoming' });
 
     // Render seriesInfo.ejs with the fetched data
     res.render("seriesInfo", {
@@ -134,7 +135,7 @@ const getData = async (req, res) => {
       seriesData: seriesData, // Pass the data to the view
       error: null // No error message by default
     });
-  } catch (err) {
+} catch (err) {
     console.error("Error fetching series data:", err);
 
     // Render seriesInfo.ejs with an error message
@@ -143,7 +144,8 @@ const getData = async (req, res) => {
       seriesData: null,
       error: "Failed to retrieve data from the database."
     });
-  }
+}
+
 };
 module.exports = {
   getSeries,

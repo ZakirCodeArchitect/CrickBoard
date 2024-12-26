@@ -1,16 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
-  </head>
-  <body>
-    <h1>Cricket Board</h1>
-    <p>Cricket Series Data</p>
-    <a href="/series/info" class="btn">Series Info</a>
-    <a href="/scoreBoard" class="btn">Score Board</a>
-    <a href="/teams" class="btn">Teams</a>
-    <a href="/search" class="btn">Search any Player</a>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <!-- Include Bootstrap for modern styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> <!-- Modern font -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f1f4f8;
+      color: #333;
+    }
+    .container {
+      margin-top: 40px;
+    }
+    .header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      font-size: 2.5rem;
+    }
+    .navbar {
+      display: flex;
+      gap: 20px;
+    }
+    .navbar .btn {
+      font-size: 1.1rem;
+      padding: 12px 25px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .navbar .btn:hover {
+      background-color: #3498db;
+    }
+    .team-card {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .team-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+    .team-card img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 15px; /* Added space between image and text */
+    }
+    .team-card h3 {
+      color: #2980b9;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .team-info {
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+    .team-info strong {
+      color: #7f8c8d;
+    }
+    .team-card .btn {
+      margin-top: 15px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background-color 0.3s ease;
+    }
+    .team-card .btn:hover {
+      background-color: #3498db;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .col-md-4 {
+      flex: 0 0 33.3333%;
+      max-width: 33.3333%;
+      padding: 10px;
+    }
+    .no-data {
+      color: #e74c3c;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-title">
+      <h1><%= title %></h1>
+      <div class="navbar">
+        <a href="/series/info" class="btn">Series Info</a>
+        <a href="/scoreBoard/info" class="btn">Score Board</a>
+        <a href="/teams" class="btn">Teams</a>
+        <a href="/search" class="btn">Search any Player</a>
+      </div>
+    </div>
+    
+    <!-- Scoreboard - Displaying each team in a separate block -->
+    <div class="row">
+      <% if (scoreBoard && scoreBoard.length > 0) { %>
+        <% scoreBoard.forEach(stage => { %> <!-- Display all cards in rows of 3 -->
+          <div class="col-md-4">
+            <div class="team-card">
+              <img src="/cricket1.jpeg" alt="Team Image">
+              <h3><%= stage.Snm %></h3>
+              <div class="team-info">
+                <p><strong>Series:</strong> <%= stage.Cnm %></p>
+                <p><strong>Country Code:</strong> <%= stage.Ccd %></p>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="no-data">No data available.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Include Bootstrap JS for any interactive components -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

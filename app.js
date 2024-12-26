@@ -19,6 +19,7 @@ app.set("view engine", "ejs");
 
 // middlewares
 app.use(express.json()); // JSON Parsing
+app.use(express.static('public'));
 
 // routes
 app.use("/", home);
