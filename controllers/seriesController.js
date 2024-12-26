@@ -1,20 +1,8 @@
-// const axios = require("axios");
-
-// const seriesDetails = async (req, res) => {
-//   try {
-//     res.render("seriesInfo"); // renders the seriesDetails Page
-//   } catch (err) {
-//     console.log("Failed to Render seriesInfo Page!!!");
-//     res.status(400).json({
-//       message: "Failed to Render seriesInfo Page!!!"
-//     });
-//   }
-// };
-
-// module.exports = { seriesDetails };
-
 const http = require("https");
+const https = require("https");
+const Series = require("../models/seriesModel"); // Import the Series model
 
+// getting Data From API
 const getSeries = (req, res) => {
   const options = {
     method: "GET",
@@ -68,4 +56,72 @@ const getSeries = (req, res) => {
   reqApi.end();
 };
 
-module.exports = { getSeries };
+// Storing Data in MongoDB
+const storeSeriesData = (req, res) => {
+  const options = {
+    method: "GET",
+    hostname: "cricket-live-data.p.rapidapi.com",
+    port: null,
+    path: "/series",
+    headers: {
+      "x-rapidapi-key": "7276a387c1msh2e7403ed45fc13fp1e2df9jsnee6cf179e4fa",
+      "x-rapidapi-host": "cricket-live-data.p.rapidapi.com"
+    }
+  };
+
+  const apiReq = https.request(options, (apiRes) => {
+    let data = "";
+
+    apiRes.on("data", (chunk) => {
+      data += chunk;
+    });
+
+    apiRes.on("end", async () => {
+      try {
+        const responseData = JSON.parse(data);
+
+        // Check if the response contains results and series data
+        if (responseData && responseData.results) {
+          const allSeriesData = [];
+
+          // Iterate over each result in the response
+          responseData.results.forEach((result) => {
+            // Extract series details from the result
+            result.series.forEach((series) => {
+              const seriesDocument = {
+                series_id: series.series_id,
+                series_name: series.series_name,
+                status: series.status || "Not Available", // Handle missing status
+                season: series.season
+              };
+              allSeriesData.push(seriesDocument);
+            });
+          });
+
+          // Save series data to MongoDB
+          await Series.insertMany(allSeriesData);
+          console.log("✅ Series Data Saved to MongoDB");
+
+          res
+            .status(200)
+            .json({ message: "Data successfully saved in database." });
+        } else {
+          console.error("❌ No data available from API");
+          res.status(400).json({ error: "No valid data available from API." });
+        }
+      } catch (err) {
+        console.error("❌ Error Parsing or Saving Data:", err);
+        res.status(500).json({ error: "Failed to parse or save series data." });
+      }
+    });
+  });
+
+  apiReq.on("error", (err) => {
+    console.error("❌ API Request Error:", err);
+    res.status(500).json({ error: "Failed to fetch data from API." });
+  });
+
+  apiReq.end();
+};
+
+module.exports = { getSeries, storeSeriesData };
