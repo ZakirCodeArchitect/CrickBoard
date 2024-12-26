@@ -124,4 +124,29 @@ const storeSeriesData = (req, res) => {
   apiReq.end();
 };
 
-module.exports = { getSeries, storeSeriesData };
+const getData = async (req, res) => {
+  try {
+    const seriesData = await Series.find(); // Fetch data from the database
+
+    // Render seriesInfo.ejs with the fetched data
+    res.render("seriesInfo", {
+      title: "Cricket Series Information", // Title of the page
+      seriesData: seriesData, // Pass the data to the view
+      error: null // No error message by default
+    });
+  } catch (err) {
+    console.error("Error fetching series data:", err);
+
+    // Render seriesInfo.ejs with an error message
+    res.render("seriesInfo", {
+      title: "Cricket Series Information",
+      seriesData: null,
+      error: "Failed to retrieve data from the database."
+    });
+  }
+};
+module.exports = {
+  getSeries,
+  storeSeriesData,
+  getData
+};

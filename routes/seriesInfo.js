@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get("/", seriesInfo.getSeries);
 router.get("/store-series", seriesInfo.storeSeriesData);
+router.get("/info", seriesInfo.getData);
 
 module.exports = router;
