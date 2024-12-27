@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+const bodyParser = require('body-parser');
 
 // Files
 const home = require("./routes/home");
@@ -21,15 +22,16 @@ app.set("view engine", "ejs");
 // middlewares
 app.use(express.json()); // JSON Parsing
 app.use(express.static('public'));  // for accessing static images and assets from Public folder.
+app.use(bodyParser.urlencoded({ extended: true })); // FORM data Parsing
 
 // routes
 app.use("/", home);
 app.use("/scoreBoard", scoreBoard);
-app.use("/search", searchPlayer);
+app.use("/", searchPlayer);
 app.use("/series", series);
 app.use("/teams", teams);
-app.use("/", player);
-app.use("/player", player);
+app.use("/", player);  
+app.use("/player", player); 
 
 // MongoDB connection
 mongoose
