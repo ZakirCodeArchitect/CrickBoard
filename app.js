@@ -28,7 +28,8 @@ app.use("/scoreBoard", scoreBoard);
 app.use("/search", searchPlayer);
 app.use("/series", series);
 app.use("/teams", teams);
-app.use("/", player);+
+app.use("/", player);
+app.use("/player", player);
 
 // MongoDB connection
 mongoose
@@ -41,7 +42,6 @@ mongoose
   });
 
 // server connection
-
 app.listen(PORT, () => {
   console.log(`Server Running on PORT : ${PORT}`);
 });
