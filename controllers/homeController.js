@@ -1,5 +1,6 @@
 const http = require("https");
 const Score = require("../models/scoreModel");
+const axios = require("axios");
 
 // viewing scores from MongoDB
 const recentEvents = async (req, res) => {
@@ -90,6 +91,4 @@ const recentEvents = async (req, res) => {
     });
   }
 };
-
-
 module.exports = { recentEvents };
