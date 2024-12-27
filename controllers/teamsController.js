@@ -1,5 +1,4 @@
 const FinalMatch = require('../models/teamsModel');
-
 const insertTeams = async (req, res) =>{
   try{
     const {team1, team2, winningTeam} = req.body;
@@ -40,8 +39,17 @@ const insertTeams = async (req, res) =>{
 }
 const teamsDetails = async (req, res) => {
   try {
+    const matches = await FinalMatch.find();
 
-    res.render("teams"); // renders the teams Page
+    if (!matches || matches.length === 0) {
+        return res.status(404).render('teams', { 
+          message: 'No match details found', 
+          teamsData: null 
+        });
+    }
+
+    // sending data to render 
+    return res.render('teams', { teamsData: matches });
   } catch (err) {
     console.log("Failed to Render teams Page!!!");
     res.status(400).json({
@@ -50,6 +58,9 @@ const teamsDetails = async (req, res) => {
   }
 };
 
+
+
 module.exports = { 
   insertTeams,
-  teamsDetails };
+  teamsDetails
+};

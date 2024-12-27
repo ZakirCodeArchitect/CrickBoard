@@ -6,6 +6,5 @@ const router = express.Router();
 
 router.get("/", teams.teamsDetails);
 router.post("/store", teams.insertTeams);
-router.get("/player", player.playerDetails);
 
 module.exports = router;

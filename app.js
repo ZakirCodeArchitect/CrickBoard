@@ -8,6 +8,7 @@ const scoreBoard = require("./routes/scoreBoard");
 const searchPlayer = require("./routes/searchPlayer");
 const series = require("./routes/seriesInfo");
 const teams = require("./routes/teams");
+const player = require("./routes/player");
 
 // Imports
 const PORT = process.env.PORT;
@@ -27,13 +28,11 @@ app.use("/scoreBoard", scoreBoard);
 app.use("/search", searchPlayer);
 app.use("/series", series);
 app.use("/teams", teams);
+app.use("/", player);+
 
 // MongoDB connection
 mongoose
-  .connect(MONGO_DB_URL, {
-    tls: true,
-    tlsAllowInvalidCertificates: true
-  })
+  .connect(MONGO_DB_URL)
   .then(() => {
     console.log("MongoDB Connected successfully");
   })
