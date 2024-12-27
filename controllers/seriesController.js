@@ -26,14 +26,16 @@ const getSeries = (req, res) => {
       const body = Buffer.concat(chunks);
       try {
         const data = JSON.parse(body.toString());
-        // Ensure 'data' exists and is an array before passing to the view
+        
+        // rendering data
         res.render("seriesInfo", {
           title: "Series Information",
           seriesData: data,
           error: null
         });
       } catch (error) {
-        // Render with error if parsing fails
+        
+        // rendering error
         res.render("seriesInfo", {
           title: "Series Information",
           seriesData: null,
@@ -44,7 +46,7 @@ const getSeries = (req, res) => {
   });
 
   reqApi.on("error", function (err) {
-    // Render with error if API request fails
+    // rendering error
     res.render("seriesInfo", {
       title: "Home Page",
       seriesData: null,
@@ -84,14 +86,12 @@ const storeSeriesData = (req, res) => {
         if (responseData && responseData.results) {
           const allSeriesData = [];
 
-          // Iterate over each result in the response
           responseData.results.forEach((result) => {
-            // Extract series details from the result
             result.series.forEach((series) => {
               const seriesDocument = {
                 series_id: series.series_id,
                 series_name: series.series_name,
-                status: series.status || "Not Available", // Handle missing status
+                status: series.status || "Not Available", // for missing status
                 season: series.season
               };
               allSeriesData.push(seriesDocument);
@@ -100,45 +100,48 @@ const storeSeriesData = (req, res) => {
 
           // Save series data to MongoDB
           await Series.insertMany(allSeriesData);
-          console.log("✅ Series Data Saved to MongoDB");
+          console.log("Series Data Saved to MongoDB");
 
-          res
-            .status(200)
-            .json({ message: "Data successfully saved in database." });
+          res.status(200).json({ 
+            message: "Data successfully saved in database." 
+          });
         } else {
-          console.error("❌ No data available from API");
-          res.status(400).json({ error: "No valid data available from API." });
+          console.error("No data available from API");
+          res.status(400).json({ 
+            error: "No valid data available from API." 
+          });
         }
       } catch (err) {
-        console.error("❌ Error Parsing or Saving Data:", err);
-        res.status(500).json({ error: "Failed to parse or save series data." });
+        console.error("Error Parsing or Saving Data:", err);
+        res.status(500).json({ 
+          error: "Failed to parse or save series data." 
+        });
       }
     });
   });
 
   apiReq.on("error", (err) => {
-    console.error("❌ API Request Error:", err);
+    console.error("API Request Error:", err);
     res.status(500).json({ error: "Failed to fetch data from API." });
   });
 
   apiReq.end();
 };
 
+// fetching data
 const getData = async (req, res) => {
   try {
-    // Fetch only series with status 'Upcoming'
+    // for recently planned series only
     const seriesData = await Series.find({ status: 'Upcoming' });
 
-    // Render seriesInfo.ejs with the fetched data
     res.render("seriesInfo", {
-      title: "Cricket Series Information", // Title of the page
-      seriesData: seriesData, // Pass the data to the view
-      error: null // No error message by default
+      title: "Cricket Series Information", 
+      seriesData: seriesData, 
+      error: null 
     });
 } catch (err) {
     console.error("Error fetching series data:", err);
 
-    // Render seriesInfo.ejs with an error message
     res.render("seriesInfo", {
       title: "Cricket Series Information",
       seriesData: null,

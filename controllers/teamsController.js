@@ -1,4 +1,6 @@
 const FinalMatch = require('../models/teamsModel');
+
+// ICC World Cup Final Teams
 const insertTeams = async (req, res) =>{
   try{
     const {team1, team2, winningTeam} = req.body;
@@ -37,6 +39,8 @@ const insertTeams = async (req, res) =>{
     });
   }
 }
+
+// getting the teams details like players names
 const teamsDetails = async (req, res) => {
   try {
     const matches = await FinalMatch.find();

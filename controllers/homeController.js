@@ -1,8 +1,7 @@
 const http = require("https");
 const Score = require("../models/scoreModel");
-const axios = require("axios");
 
-// viewing scores from MongoDB
+// recent matches
 const recentEvents = async (req, res) => {
   try {
     // Fetch stages data from the database
@@ -39,10 +38,10 @@ const recentEvents = async (req, res) => {
           try {
             const body = Buffer.concat(chunks);
             const data = JSON.parse(body.toString());
-            stagesData = data.Stages;
+            stagesData = data.Stages;   // stages section basically represent the information of the teams and there series
 
             // Insert data into MongoDB
-            await Score.insertMany(stagesData);
+            await Score.insertMany(stagesData); 
             console.log("Events data saved to MongoDB");
 
             // Rendering

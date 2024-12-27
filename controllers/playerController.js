@@ -1,5 +1,6 @@
 const Player = require('../models/playersModel');
 
+// getting players details from Database
 const getPlayerDetails = async (req, res) => {
   try {
     const { playerName } = req.params;
@@ -19,6 +20,7 @@ const getPlayerDetails = async (req, res) => {
   }
 };
 
+// inserting team players detaild in database
 const insertPlayerDetails = async (req, res) => {
   try {
     const { 
@@ -36,7 +38,7 @@ const insertPlayerDetails = async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Create a new player instance
+    // Create a new instance
     const newPlayer = new Player({
         fullName,
         birthDate,
@@ -47,17 +49,18 @@ const insertPlayerDetails = async (req, res) => {
         playingRole
     });
 
-    // Save the player to the database
     const savedPlayer = await newPlayer.save();
 
     return res.status(201).json({
-        message: 'Player added successfully',
+        message: 'Players inserted successfully',
         player: savedPlayer
     });
 
 } catch (error) {
-    console.error('Error adding player:', error.message);
-    return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    console.error('Error inserted player:', error.message);
+    return res.status(500).json({ 
+      message: 'Error inserting players', error: error.message 
+    });
 }
 }
 

@@ -2,6 +2,7 @@ const http = require("https");
 const Score = require("../models/scoreModel");
 const Series = require("../models/seriesModel");
 
+// fetching data from API
 const scoreBoard = async (req, res) => {
   const options = {
     method: "GET",
@@ -58,7 +59,8 @@ const scoreBoard = async (req, res) => {
 // Controller for getting the score board
 const storeScoreBoard = async (req, res) => {
   try {
-    // Fetch stages data from the database
+    
+    // fetching data from Database
     let stagesData = await Score.find();
 
     // If the data is not present in the database, fetch from the API
@@ -85,44 +87,25 @@ const storeScoreBoard = async (req, res) => {
           const body = Buffer.concat(chunks);
           try {
             const data = JSON.parse(body.toString());
-            stagesData = data.Stages;
+            stagesData = data.Stages;   // stages basically series information from API
 
-            // Insert the stages data into MongoDB
+            // Insert the data into MongoDB
             await Score.insertMany(stagesData);
             console.log("Stages data saved to MongoDB");
 
-            // // Render the score board with the fetched data
-            // res.render("scoreBoard", {
-            //   title: "Score Board",
-            //   scoreBoard: stagesData,
-            //   error: null
-            // });
           } catch (error) {
-            // Render error if parsing the API response fails
-            // res.render("scoreBoard", {
-            //   title: "Score Board",
-            //   scoreBoard: null,
-            //   error: "Error parsing API response"
-            // });
             res.send(error);
           }
         });
       });
 
       reqApi.on("error", (err) => {
-        // // Handle errors from the API request
-        // res.render("scoreBoard", {
-        //   title: "Score Board",
-        //   scoreBoard: null,
-        //   error: "Error making API request",
-        //   details: err
-        // });
         res.send(err.message);
       });
 
       reqApi.end();
     } else {
-      // If stages data is already in the database, render the view
+      // If data is already in the database, render the view
       res.render("scoreBoard", {
         title: "Score Board",
         scoreBoard: stagesData,
@@ -130,7 +113,6 @@ const storeScoreBoard = async (req, res) => {
       });
     }
   } catch (error) {
-    // Handle any errors that occur in the controller
     res.render("scoreBoard", {
       title: "Score Board",
       scoreBoard: null,
@@ -143,19 +125,17 @@ const storeScoreBoard = async (req, res) => {
 // viewing scores from MongoDB
 const getScoreBoard = async (req, res) => {
   try {
-    // Fetch series whose status is not 'Upcoming'
+    // for series other than Upcoming - this collection contains the scores too with match details
     const seriesData = await Series.find({ status: { $ne: 'Upcoming' } });
 
-    // Render seriesInfo.ejs with the fetched data
     res.render("scoreBoard", {
-      title: "Cricket Series Information", // Title of the page
-      seriesData: seriesData, // Pass the data to the view
-      error: null // No error message by default
+      title: "Cricket Series Information", 
+      seriesData: seriesData, 
+      error: null 
     });
 } catch (err) {
     console.error("Error fetching series data:", err);
 
-    // Render seriesInfo.ejs with an error message
     res.render("scoreBoard", {
       title: "Cricket Series Information",
       seriesData: null,

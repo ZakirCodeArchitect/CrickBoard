@@ -5,45 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-name {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .detail-title {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .btn-back {
+            background-color: #102b48;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #9ab9da;
+        }
+    </style>
 </head>
 <body>
-    <div class="container my-5">
+    <div class="container">
         <% if (player) { %>
-            <h2 class="text-center mb-4"><%= player.fullName %></h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>FULL NAME</h5>
-                    <p><strong><%= player.fullName %></strong></p>
+            <div class="card p-4">
+                <h2 class="text-center mb-4 player-name">🏏 <%= player.fullName %></h2>
+                <div class="row text-center">
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">FULL NAME</h5>
+                        <p class="detail-value"><%= player.fullName %></p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">BORN</h5>
+                        <p class="detail-value"><%= player.birthDate.toDateString() %>, <%= player.birthPlace %></p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">AGE</h5>
+                        <p class="detail-value"><%= player.age %></p>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>BORN</h5>
-                    <p><strong><%= player.birthDate.toDateString() %>, <%= player.birthPlace %></strong></p>
+                <div class="row text-center mt-4">
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">BATTING STYLE</h5>
+                        <p class="detail-value"><%= player.battingStyle %></p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">BOWLING STYLE</h5>
+                        <p class="detail-value"><%= player.bowlingStyle %></p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h5 class="detail-title">PLAYING ROLE</h5>
+                        <p class="detail-value"><%= player.playingRole %></p>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>AGE</h5>
-                    <p><strong><%= player.age %></strong></p>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <h5>BATTING STYLE</h5>
-                    <p><strong><%= player.battingStyle %></strong></p>
-                </div>
-                <div class="col-md-4">
-                    <h5>BOWLING STYLE</h5>
-                    <p><strong><%= player.bowlingStyle %></strong></p>
-                </div>
-                <div class="col-md-4">
-                    <h5>PLAYING ROLE</h5>
-                    <p><strong><%= player.playingRole %></strong></p>
+                <div class="text-center mt-4">
+                    <a href="/teams" class="btn btn-back">⬅️ Back to Teams</a>
                 </div>
             </div>
         <% } else { %>
-            <p class="text-center text-danger">Player details not found.</p>
+            <div class="alert alert-danger text-center">
+                <p>Player details not found.</p>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/teams" class="btn btn-back">⬅️ Back to Teams</a>
+            </div>
         <% } %>
-        <div class="text-center mt-4">
-            <a href="/teams" class="btn btn-primary">Back to Teams</a>
-        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
