@@ -19,7 +19,7 @@ app.set("view engine", "ejs");
 
 // middlewares
 app.use(express.json()); // JSON Parsing
-app.use(express.static('public'));
+app.use(express.static('public'));  // for accessing static images and assets from Public folder.
 
 // routes
 app.use("/", home);
@@ -30,7 +30,10 @@ app.use("/teams", teams);
 
 // MongoDB connection
 mongoose
-  .connect(MONGO_DB_URL)
+  .connect(MONGO_DB_URL, {
+    tls: true,
+    tlsAllowInvalidCertificates: true
+  })
   .then(() => {
     console.log("MongoDB Connected successfully");
   })
